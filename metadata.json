@@ -1,0 +1,8 @@
+{
+  "name": "HAI.",
+  "description": "Cunoaște oameni. Fă planuri. Ieși din casă. Aplicație socială și de dating pentru adulți din România.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

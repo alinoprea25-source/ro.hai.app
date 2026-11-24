@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HAI.</string>
+    <string name="title_activity_main">HAI.</string>
+    <string name="package_name">ro.hai.app</string>
+    <string name="custom_url_scheme">ro.hai.app</string>
+</resources>

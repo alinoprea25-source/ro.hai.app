@@ -1,0 +1,41 @@
+{
+	"appId": "ro.hai.app",
+	"appName": "HAI.",
+	"webDir": "mobile-shell",
+	"backgroundColor": "#FAFAF9",
+	"loggingBehavior": "production",
+	"server": {
+		"androidScheme": "https",
+		"iosScheme": "capacitor",
+		"errorPath": "index.html"
+	},
+	"android": {
+		"allowMixedContent": false,
+		"captureInput": true,
+		"webContentsDebuggingEnabled": false,
+		"backgroundColor": "#FAFAF9"
+	},
+	"ios": {
+		"scheme": "App",
+		"contentInset": "always",
+		"limitsNavigationsToAppBoundDomains": false,
+		"backgroundColor": "#FAFAF9"
+	},
+	"plugins": {
+		"SystemBars": {
+			"insetsHandling": "css",
+			"initialViewportFitValueHint": "cover",
+			"style": "DEFAULT"
+		},
+		"Keyboard": {
+			"resize": "body",
+			"resizeOnFullScreen": true
+		},
+		"SplashScreen": {
+			"launchAutoHide": false,
+			"launchShowDuration": 0,
+			"backgroundColor": "#FAFAF9",
+			"showSpinner": false
+		}
+	}
+}

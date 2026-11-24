@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --hai-bg: #FAFAF9;
+  --hai-surface: #FFFFFF;
+  --hai-surface-muted: #F3F3F1;
+  --hai-text: #18191D;
+  --hai-text-secondary: #717680;
+  --hai-coral: #F26B82;
+  --hai-coral-hover: #E2556E;
+  --hai-coral-soft: #FFF0F3;
+  --hai-border: #E9E9EC;
+  --hai-nav-dark: #18191D;
+  --hai-success: #21866F;
+  --hai-warning: #B45309;
+  --hai-danger: #DC2626;
+}
+
+.dark {
+  --hai-bg: #0E0F12;
+  --hai-surface: #18191D;
+  --hai-surface-muted: #22242A;
+  --hai-text: #F5F5F4;
+  --hai-text-secondary: #9CA3AF;
+  --hai-coral: #F26B82;
+  --hai-coral-hover: #F58498;
+  --hai-coral-soft: #2D161C;
+  --hai-border: #272930;
+  --hai-nav-dark: #141519;
+  --hai-success: #34D399;
+  --hai-warning: #FBBF24;
+  --hai-danger: #F87171;
+}
+
+html,
+body {
+  background-color: var(--hai-bg);
+  color: var(--hai-text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior-y: contain;
+}
+
+.font-display {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", system-ui, sans-serif;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

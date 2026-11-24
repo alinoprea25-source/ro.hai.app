@@ -1,0 +1,45 @@
+# Dependencies & caches
+node_modules/
+.next/
+out/
+coverage/
+tsconfig.tsbuildinfo
+.DS_Store
+*.log
+
+# Environment variables (keep template only)
+.env*
+!.env.example
+
+# Firebase Admin & service account credentials
+*service-account*.json
+*serviceAccount*.json
+serviceAccountKey.json
+*firebase-adminsdk*.json
+.firebase/
+firebase-debug.log*
+firestore-debug.log*
+
+# Android / iOS keystores, signing configs & local build outputs
+*.keystore
+*.jks
+*.p12
+*.pem
+*.key
+*.mobileprovision
+keystore.properties
+key.properties
+android/local.properties
+android/.gradle/
+android/build/
+android/app/build/
+android/captures/
+android/.cxx/
+*.apk
+*.aab
+*.ap_
+google-services.json
+GoogleService-Info.plist
+ios/App/Pods/
+ios/DerivedData/
+

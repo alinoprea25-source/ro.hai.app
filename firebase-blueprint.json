@@ -1,0 +1,696 @@
+{
+  "entities": {
+    "UserAccount": {
+      "title": "UserAccount",
+      "description": "Private user account record containing PII and account settings, readable only by the owner or an authorized administrator.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "format": "email", "minLength": 3, "maxLength": 160 },
+        "isAdultConfirmed": { "type": "boolean" },
+        "hasCompletedOnboarding": { "type": "boolean" },
+        "verificationStatus": { "type": "string", "enum": ["unverified", "pending", "verified", "rejected"], "maxLength": 20 },
+        "verificationNote": { "type": "string", "maxLength": 240 },
+        "reconfirmationEnabled": { "type": "boolean" },
+        "reconfirmationHoursBefore": { "type": "integer" },
+        "reconfirmationFollowUp": { "type": "boolean" },
+        "autoReleaseWaitlistSpot": { "type": "boolean" },
+        "notificationsMatches": { "type": "boolean" },
+        "notificationsActivities": { "type": "boolean" },
+        "notificationsSafety": { "type": "boolean" },
+        "accountStatus": { "type": "string", "enum": ["active", "suspended", "deleted"], "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "uid",
+        "email",
+        "isAdultConfirmed",
+        "hasCompletedOnboarding",
+        "verificationStatus",
+        "reconfirmationEnabled",
+        "reconfirmationHoursBefore",
+        "reconfirmationFollowUp",
+        "autoReleaseWaitlistSpot",
+        "notificationsMatches",
+        "notificationsActivities",
+        "notificationsSafety",
+        "accountStatus",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PublicProfile": {
+      "title": "PublicProfile",
+      "description": "Public social and dating profile with zero PII (no email, phone, or private address).",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 60 },
+        "age": { "type": "integer" },
+        "city": { "type": "string", "enum": ["Cluj-Napoca", "București", "Timișoara", "Brașov", "Sibiu", "Iași"], "maxLength": 30 },
+        "occupation": { "type": "string", "maxLength": 80 },
+        "bio": { "type": "string", "maxLength": 300 },
+        "interests": { "type": "array" },
+        "activityPreferences": { "type": "array" },
+        "photoKey": { "type": "string", "enum": ["welcome", "ioana", "andrei", "maria", "razvan", "elena", "padel", "hiking", "coffee", "cinema"], "maxLength": 20 },
+        "customPhotoUrl": { "type": "string", "maxLength": 2048 },
+        "lookingFor": { "type": "string", "maxLength": 140 },
+        "isVerified": { "type": "boolean" },
+        "showMeInDiscovery": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "uid",
+        "name",
+        "age",
+        "city",
+        "occupation",
+        "bio",
+        "interests",
+        "activityPreferences",
+        "photoKey",
+        "lookingFor",
+        "isVerified",
+        "showMeInDiscovery",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "DatingPreferences": {
+      "title": "DatingPreferences",
+      "description": "Private discovery and matching preferences owned by a user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "city": { "type": "string", "enum": ["Toate", "Cluj-Napoca", "București", "Timișoara", "Brașov", "Sibiu", "Iași"], "maxLength": 30 },
+        "minAge": { "type": "integer" },
+        "maxAge": { "type": "integer" },
+        "maxDistanceKm": { "type": "integer" },
+        "showMeInDiscovery": { "type": "boolean" },
+        "showParticipantsOnJoinedActivities": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "uid",
+        "city",
+        "minAge",
+        "maxAge",
+        "maxDistanceKm",
+        "showMeInDiscovery",
+        "showParticipantsOnJoinedActivities",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ProfileLike": {
+      "title": "ProfileLike",
+      "description": "Directional like action between two distinct users.",
+      "type": "object",
+      "properties": {
+        "fromUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "toUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fromUid", "toUid", "createdAt"]
+    },
+    "ProfilePass": {
+      "title": "ProfilePass",
+      "description": "Private pass/skip record so skipped profiles are not shown repeatedly.",
+      "type": "object",
+      "properties": {
+        "fromUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "toUid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["fromUid", "toUid", "createdAt"]
+    },
+    "DatingMatch": {
+      "title": "DatingMatch",
+      "description": "Confirmed mutual match between two users verified against bidirectional likes.",
+      "type": "object",
+      "properties": {
+        "userA": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userB": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "status": { "type": "string", "enum": ["active", "unmatched", "blocked"], "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userA", "userB", "status", "createdAt", "updatedAt"]
+    },
+    "SocialActivity": {
+      "title": "SocialActivity",
+      "description": "Real-world group social activity hosted in a Romanian city.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "category": { "type": "string", "enum": ["Sport", "Social", "Outdoor", "Cultură"], "maxLength": 20 },
+        "description": { "type": "string", "minLength": 10, "maxLength": 800 },
+        "dateLabel": { "type": "string", "minLength": 3, "maxLength": 40 },
+        "isoDate": { "type": "string", "minLength": 10, "maxLength": 10, "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "time": { "type": "string", "minLength": 5, "maxLength": 5, "pattern": "^\\d{2}:\\d{2}$" },
+        "city": { "type": "string", "enum": ["Cluj-Napoca", "București", "Timișoara", "Brașov", "Sibiu", "Iași"], "maxLength": 30 },
+        "location": { "type": "string", "minLength": 3, "maxLength": 140 },
+        "organizerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "organizerName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "organizerPhotoKey": { "type": "string", "maxLength": 20 },
+        "maxParticipants": { "type": "integer" },
+        "participantCount": { "type": "integer" },
+        "priceLei": { "type": "integer" },
+        "requiresApproval": { "type": "boolean" },
+        "privacyShowParticipants": { "type": "boolean" },
+        "autoReleaseWaitlistSpot": { "type": "boolean" },
+        "reconfirmationDeadlineIso": { "type": "string", "maxLength": 40 },
+        "rules": { "type": "array" },
+        "photoKey": { "type": "string", "maxLength": 20 },
+        "status": { "type": "string", "enum": ["active", "cancelled", "completed", "removed"], "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "title",
+        "category",
+        "description",
+        "dateLabel",
+        "isoDate",
+        "time",
+        "city",
+        "location",
+        "organizerId",
+        "organizerName",
+        "organizerPhotoKey",
+        "maxParticipants",
+        "participantCount",
+        "requiresApproval",
+        "privacyShowParticipants",
+        "autoReleaseWaitlistSpot",
+        "rules",
+        "photoKey",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ActivityParticipant": {
+      "title": "ActivityParticipant",
+      "description": "Participant membership record for a social activity.",
+      "type": "object",
+      "properties": {
+        "activityId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "organizerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "photoKey": { "type": "string", "maxLength": 20 },
+        "role": { "type": "string", "enum": ["organizer", "participant"], "maxLength": 20 },
+        "status": { "type": "string", "enum": ["confirmed", "pending_approval", "cancelled"], "maxLength": 20 },
+        "privacyShowParticipants": { "type": "boolean" },
+        "checkedIn": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "activityId",
+        "organizerId",
+        "userId",
+        "userName",
+        "photoKey",
+        "role",
+        "status",
+        "privacyShowParticipants",
+        "checkedIn",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ActivityWaitlistEntry": {
+      "title": "ActivityWaitlistEntry",
+      "description": "Ordered waitlist queue entry and replacement offer state for a full activity.",
+      "type": "object",
+      "properties": {
+        "activityId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "organizerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "photoKey": { "type": "string", "maxLength": 20 },
+        "position": { "type": "integer" },
+        "status": { "type": "string", "enum": ["WAITING", "OFFERED", "ACCEPTED", "DECLINED", "EXPIRED"], "maxLength": 20 },
+        "offerExpiresAtIso": { "type": "string", "maxLength": 40 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "activityId",
+        "organizerId",
+        "userId",
+        "userName",
+        "photoKey",
+        "position",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "PlanConfirmation": {
+      "title": "PlanConfirmation",
+      "description": "Explicit participant confirmation and reconfirmation state for a plan or meetup.",
+      "type": "object",
+      "properties": {
+        "planId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "planOwnerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "partnerId": { "type": "string", "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "confirmed": { "type": "boolean" },
+        "reconfirmed": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["planId", "userId", "planOwnerId", "userName", "confirmed", "reconfirmed", "createdAt", "updatedAt"]
+    },
+    "PlanChangeProposal": {
+      "title": "PlanChangeProposal",
+      "description": "One-tap rescheduling or location change proposal requiring mutual acceptance.",
+      "type": "object",
+      "properties": {
+        "planId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "proposedByUserId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "proposedByName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "recipientUserId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "kind": { "type": "string", "enum": ["day", "time", "location", "mixed"], "maxLength": 20 },
+        "slots": { "type": "array" },
+        "note": { "type": "string", "maxLength": 300 },
+        "status": { "type": "string", "enum": ["PENDING", "ACCEPTED", "REJECTED", "EXPIRED"], "maxLength": 20 },
+        "acceptedSlotId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["planId", "proposedByUserId", "proposedByName", "recipientUserId", "kind", "slots", "status", "createdAt", "updatedAt"]
+    },
+    "MeetupPlan": {
+      "title": "MeetupPlan",
+      "description": "1-on-1 meetup or user plan tracking explicit confirmation lifecycle.",
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": ["meetup", "activity", "organized"], "maxLength": 20 },
+        "activityId": { "type": "string", "maxLength": 128 },
+        "creatorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "partnerId": { "type": "string", "maxLength": 128 },
+        "organizerId": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "dateLabel": { "type": "string", "minLength": 2, "maxLength": 40 },
+        "isoDate": { "type": "string", "minLength": 10, "maxLength": 10, "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "time": { "type": "string", "minLength": 5, "maxLength": 5, "pattern": "^\\d{2}:\\d{2}$" },
+        "city": { "type": "string", "enum": ["Cluj-Napoca", "București", "Timișoara", "Brașov", "Sibiu", "Iași"], "maxLength": 30 },
+        "location": { "type": "string", "minLength": 3, "maxLength": 140 },
+        "lifecycleStatus": {
+          "type": "string",
+          "enum": ["PROPOSED", "AWAITING_CONFIRMATION", "CONFIRMED", "RECONFIRMATION_REQUIRED", "CHANGE_PROPOSED", "RESCHEDULED", "CANCELLED", "COMPLETED", "DISPUTED"],
+          "maxLength": 30
+        },
+        "photoKey": { "type": "string", "maxLength": 20 },
+        "autoReleaseWaitlistSpot": { "type": "boolean" },
+        "reconfirmationDeadlineIso": { "type": "string", "maxLength": 40 },
+        "checkedInByCreator": { "type": "boolean" },
+        "checkedInByPartner": { "type": "boolean" },
+        "sharedWithContactName": { "type": "string", "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "type",
+        "creatorId",
+        "title",
+        "dateLabel",
+        "isoDate",
+        "time",
+        "city",
+        "location",
+        "lifecycleStatus",
+        "photoKey",
+        "autoReleaseWaitlistSpot",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ActivityComment": {
+      "title": "ActivityComment",
+      "description": "Discussion comment or organizer Q&A on an activity page.",
+      "type": "object",
+      "properties": {
+        "activityId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "parentId": { "type": "string", "maxLength": 128 },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "authorPhotoKey": { "type": "string", "maxLength": 20 },
+        "authorRole": { "type": "string", "enum": ["Organizator", "Participant", "Membru"], "maxLength": 20 },
+        "content": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "isDeleted": { "type": "boolean" },
+        "removedByModerator": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "activityId",
+        "authorId",
+        "authorName",
+        "authorPhotoKey",
+        "authorRole",
+        "content",
+        "isDeleted",
+        "removedByModerator",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "ActivityReview": {
+      "title": "ActivityReview",
+      "description": "Verified attendee review submitted after an activity completes.",
+      "type": "object",
+      "properties": {
+        "activityId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "organizerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "authorPhotoKey": { "type": "string", "maxLength": 20 },
+        "rating": { "type": "integer" },
+        "feedback": { "type": "string", "minLength": 5, "maxLength": 600 },
+        "removedByModerator": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "activityId",
+        "organizerId",
+        "authorId",
+        "authorName",
+        "authorPhotoKey",
+        "feedback",
+        "removedByModerator",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AttendanceRecord": {
+      "title": "AttendanceRecord",
+      "description": "Auditable attendance or cancellation record used for reliability scoring.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "activityId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "activityTitle": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "eventDateIso": { "type": "string", "minLength": 10, "maxLength": 10, "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "eventTime": { "type": "string", "minLength": 5, "maxLength": 5, "pattern": "^\\d{2}:\\d{2}$" },
+        "status": {
+          "type": "string",
+          "enum": ["VERIFIED_ATTENDANCE", "EARLY_CANCELLATION", "LATE_CANCELLATION", "VERIFIED_NO_SHOW", "SAFETY_CANCELLATION", "ORGANIZER_CANCELLED", "UNCONFIRMED_INVITATION", "TECHNICAL_FAILURE", "DISPUTED"],
+          "maxLength": 30
+        },
+        "verifiedBy": { "type": "string", "enum": ["event_code", "organizer_confirmation", "system_cancellation", "safety_override"], "maxLength": 30 },
+        "disputeStatus": { "type": "string", "enum": ["NONE", "OPEN", "RESOLVED_EXCUSED", "RESOLVED_UPHELD"], "maxLength": 24 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "activityId", "activityTitle", "eventDateIso", "eventTime", "status", "verifiedBy", "disputeStatus", "createdAt", "updatedAt"]
+    },
+    "ReliabilityScore": {
+      "title": "ReliabilityScore",
+      "description": "System-computed attendance reliability summary; cannot be altered by regular users.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "isNewUser": { "type": "boolean" },
+        "score": { "type": "integer" },
+        "eligibleCount": { "type": "integer" },
+        "verifiedAttendanceCount": { "type": "integer" },
+        "lateCancellationCount": { "type": "integer" },
+        "verifiedNoShowCount": { "type": "integer" },
+        "excludedCount": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId",
+        "isNewUser",
+        "eligibleCount",
+        "verifiedAttendanceCount",
+        "lateCancellationCount",
+        "verifiedNoShowCount",
+        "excludedCount",
+        "updatedAt"
+      ]
+    },
+    "ReliabilityDispute": {
+      "title": "ReliabilityDispute",
+      "description": "User-submitted dispute for an attendance record awaiting moderator review.",
+      "type": "object",
+      "properties": {
+        "recordId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "activityId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "reason": { "type": "string", "minLength": 10, "maxLength": 500 },
+        "status": { "type": "string", "enum": ["OPEN", "RESOLVED_EXCUSED", "RESOLVED_UPHELD"], "maxLength": 24 },
+        "moderatorNote": { "type": "string", "maxLength": 300 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["recordId", "userId", "userName", "activityId", "reason", "status", "createdAt", "updatedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Private 1-on-1 conversation metadata gated by a confirmed match and E2EE status.",
+      "type": "object",
+      "properties": {
+        "matchId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "participantA": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "participantB": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "encryptionMode": { "type": "string", "enum": ["disabled_pending_e2ee", "e2ee_v1"], "maxLength": 30 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["matchId", "participantA", "participantB", "encryptionMode", "createdAt", "updatedAt"]
+    },
+    "EncryptedMessage": {
+      "title": "EncryptedMessage",
+      "description": "End-to-end encrypted message payload; plaintext message storage is disallowed.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "ciphertext": { "type": "string", "minLength": 16, "maxLength": 4096 },
+        "nonce": { "type": "string", "minLength": 12, "maxLength": 128 },
+        "senderPublicKey": { "type": "string", "minLength": 20, "maxLength": 512 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "ciphertext", "nonce", "senderPublicKey", "createdAt"]
+    },
+    "NotificationRecord": {
+      "title": "NotificationRecord",
+      "description": "User-scoped notification item for plans, matches, and safety alerts.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "body": { "type": "string", "minLength": 2, "maxLength": 400 },
+        "type": { "type": "string", "maxLength": 40 },
+        "read": { "type": "boolean" },
+        "planId": { "type": "string", "maxLength": 128 },
+        "activityId": { "type": "string", "maxLength": 128 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "title", "body", "type", "read", "createdAt", "updatedAt"]
+    },
+    "UserBlock": {
+      "title": "UserBlock",
+      "description": "User-controlled safety block relationship.",
+      "type": "object",
+      "properties": {
+        "blockerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "blockedId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["blockerId", "blockedId", "createdAt"]
+    },
+    "SafetyReport": {
+      "title": "SafetyReport",
+      "description": "Abuse or safety report readable only by the reporter (for own report) or administrators.",
+      "type": "object",
+      "properties": {
+        "reporterId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "targetType": { "type": "string", "enum": ["user", "activity", "comment", "review"], "maxLength": 20 },
+        "targetId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "targetTitle": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "reason": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "details": { "type": "string", "maxLength": 600 },
+        "status": { "type": "string", "enum": ["în analiză", "revizuit", "eliminat", "respins"], "maxLength": 20 },
+        "appealStatus": { "type": "string", "enum": ["NONE", "PENDING", "GRANTED"], "maxLength": 20 },
+        "appealNote": { "type": "string", "maxLength": 400 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reporterId", "targetType", "targetId", "targetTitle", "reason", "details", "status", "appealStatus", "createdAt", "updatedAt"]
+    },
+    "ModerationAction": {
+      "title": "ModerationAction",
+      "description": "Admin-only audit log of moderation decisions.",
+      "type": "object",
+      "properties": {
+        "moderatorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "targetType": { "type": "string", "enum": ["comment", "review", "user", "activity", "dispute"], "maxLength": 20 },
+        "targetId": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "action": { "type": "string", "enum": ["REMOVED", "DISMISSED_REPORT", "APPEAL_GRANTED", "DISPUTE_EXCUSED", "DISPUTE_UPHELD", "VERIFICATION_APPROVED", "VERIFICATION_REJECTED"], "maxLength": 30 },
+        "reason": { "type": "string", "minLength": 3, "maxLength": 300 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["moderatorId", "targetType", "targetId", "action", "reason", "createdAt"]
+    },
+    "VerificationRequest": {
+      "title": "VerificationRequest",
+      "description": "Private pose-selfie verification submission reviewed solely by administrators.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "poseId": { "type": "string", "enum": ["pose-peace-left", "pose-open-palm-chin", "pose-ok-right"], "maxLength": 40 },
+        "storagePath": { "type": "string", "minLength": 5, "maxLength": 300 },
+        "status": { "type": "string", "enum": ["pending", "verified", "rejected"], "maxLength": 20 },
+        "reviewNote": { "type": "string", "maxLength": 240 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "poseId", "storagePath", "status", "createdAt", "updatedAt"]
+    },
+    "TrustedContact": {
+      "title": "TrustedContact",
+      "description": "Private emergency/trusted contact saved by a user for voluntary safety check-ins.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "relation": { "type": "string", "minLength": 2, "maxLength": 50 },
+        "contactInfo": { "type": "string", "minLength": 3, "maxLength": 120 },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name", "relation", "contactInfo", "createdAt", "updatedAt"]
+    },
+    "AdminRegistry": {
+      "title": "AdminRegistry",
+      "description": "Server/console-managed administrator allowlist.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "role": { "type": "string", "enum": ["admin", "moderator"], "maxLength": 20 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserAccount" },
+      "description": "Private user account and PII settings."
+    },
+    "/profiles/{userId}": {
+      "schema": { "$ref": "#/entities/PublicProfile" },
+      "description": "Public/discovery user profile without PII."
+    },
+    "/dating_preferences/{userId}": {
+      "schema": { "$ref": "#/entities/DatingPreferences" },
+      "description": "User discovery filter preferences."
+    },
+    "/likes/{likeId}": {
+      "schema": { "$ref": "#/entities/ProfileLike" },
+      "description": "User-to-user like records."
+    },
+    "/passes/{passId}": {
+      "schema": { "$ref": "#/entities/ProfilePass" },
+      "description": "User-to-user pass records."
+    },
+    "/matches/{matchId}": {
+      "schema": { "$ref": "#/entities/DatingMatch" },
+      "description": "Confirmed mutual dating matches."
+    },
+    "/activities/{activityId}": {
+      "schema": { "$ref": "#/entities/SocialActivity" },
+      "description": "Social group activities across Romanian cities."
+    },
+    "/activity_participants/{participantId}": {
+      "schema": { "$ref": "#/entities/ActivityParticipant" },
+      "description": "Participants joined to social activities."
+    },
+    "/activity_waitlists/{entryId}": {
+      "schema": { "$ref": "#/entities/ActivityWaitlistEntry" },
+      "description": "Waitlist entries and offers for full activities."
+    },
+    "/plan_confirmations/{confirmationId}": {
+      "schema": { "$ref": "#/entities/PlanConfirmation" },
+      "description": "Participant confirmations and reconfirmations for plans."
+    },
+    "/plan_change_proposals/{proposalId}": {
+      "schema": { "$ref": "#/entities/PlanChangeProposal" },
+      "description": "Mutual rescheduling/location proposals for plans."
+    },
+    "/meetups/{meetupId}": {
+      "schema": { "$ref": "#/entities/MeetupPlan" },
+      "description": "1-on-1 dating meetups and organized user plans."
+    },
+    "/comments/{commentId}": {
+      "schema": { "$ref": "#/entities/ActivityComment" },
+      "description": "Discussion comments on social activities."
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/ActivityReview" },
+      "description": "Verified post-activity organizer reviews."
+    },
+    "/attendance_records/{recordId}": {
+      "schema": { "$ref": "#/entities/AttendanceRecord" },
+      "description": "Verified attendance and cancellation records."
+    },
+    "/reliability_scores/{userId}": {
+      "schema": { "$ref": "#/entities/ReliabilityScore" },
+      "description": "System-computed attendance reliability summaries."
+    },
+    "/reliability_disputes/{disputeId}": {
+      "schema": { "$ref": "#/entities/ReliabilityDispute" },
+      "description": "User disputes against attendance records."
+    },
+    "/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "Match-gated conversation metadata and E2EE status."
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/EncryptedMessage" },
+      "description": "Encrypted messages strictly requiring E2EE fields."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/NotificationRecord" },
+      "description": "User notifications."
+    },
+    "/blocks/{blockId}": {
+      "schema": { "$ref": "#/entities/UserBlock" },
+      "description": "User safety blocks."
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/SafetyReport" },
+      "description": "Safety and abuse reports."
+    },
+    "/moderation_actions/{actionId}": {
+      "schema": { "$ref": "#/entities/ModerationAction" },
+      "description": "Admin moderation audit logs."
+    },
+    "/verification_requests/{requestId}": {
+      "schema": { "$ref": "#/entities/VerificationRequest" },
+      "description": "Private pose-selfie verification queue."
+    },
+    "/trusted_contacts/{contactId}": {
+      "schema": { "$ref": "#/entities/TrustedContact" },
+      "description": "Private trusted contacts for safety check-ins."
+    },
+    "/admins/{userId}": {
+      "schema": { "$ref": "#/entities/AdminRegistry" },
+      "description": "Administrator registry."
+    }
+  }
+}

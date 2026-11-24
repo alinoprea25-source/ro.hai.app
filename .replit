@@ -1,0 +1,19 @@
+modules = ["nodejs-22"]
+run = "npm run dev -- -H 0.0.0.0 -p 3000"
+entrypoint = "app/page.tsx"
+
+[nix]
+channel = "stable-24_11"
+
+[env]
+PORT = "3000"
+NODE_ENV = "development"
+
+[[ports]]
+localPort = 3000
+externalPort = 80
+
+[deployment]
+deploymentTarget = "autoscale"
+build = ["sh", "-c", "NODE_ENV=production npm run build && cp -r .next/static .next/standalone/.next/static && ([ -d public ] && cp -r public .next/standalone/public || true)"]
+run = ["sh", "-c", "PORT=3000 HOSTNAME=0.0.0.0 NODE_ENV=production node .next/standalone/server.js"]
